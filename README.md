@@ -1,1 +1,1 @@
-# parallel-magaraga
+# Parallel maharaja
