@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+
+# Bin
+CMakeCache.txt
+chessboard
+cmake_install.cmake
+Makefile
+result.txt
+/CMakeFiles
