@@ -38,7 +38,8 @@ void Chessboard::PrintHardDecision() {
         }
     }
     mutex m;
-    // первым аргументом стоял execution::par затем, coordinates.begin()
+    // TODO первым аргументом стоял execution::par затем, coordinates.begin(). execution::par- запуск в параллельном режиме (но только по потокам)
+    // а нужно по процессам
     for_each(coordinates.begin(), coordinates.end(), [&](const pair<size_t, size_t>& coord) {// для последовательного режима использовать
         AddMagaraja(chessboard_map_, coord.second, coord.first,ref(m));                                      // execution::seq
         });

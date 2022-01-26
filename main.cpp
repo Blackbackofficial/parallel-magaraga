@@ -1,5 +1,6 @@
 ﻿
 #include <iostream>
+#include <fstream>
 
 #include "chessboard.h"
 #include "log_duration.h"
@@ -19,7 +20,7 @@ int main() {
 
     Chessboard chessboard(chessboard_size);
 
-    // TODO перенести вывод времени в текстовый файл
+    // TODO перенести вывод времени в текстовый файл так же как и колличество процессов
     LogDuration log("Hard with par");
     chessboard.PrintHardDecision();
 
