@@ -1,7 +1,3 @@
-//
-// Created by User on 28.01.2022.
-//
-
 #include "maharaja.h"
 
 
@@ -92,7 +88,7 @@ position Maharaja::search_min_position() {
         }
         //std::cout << "Процесс " << process_num << " завершился" << std::endl;
         close(pip[1]);
-        exit(0);
+//        exit(0);
     }
 
     close(pip[1]);

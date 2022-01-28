@@ -1,9 +1,5 @@
-//
-// Created by User on 28.01.2022.
-//
-
-#ifndef MPI_MAG_MAHARAJA_H
-#define MPI_MAG_MAHARAJA_H
+#ifndef parallel_maharaja_MAHARAJA_H
+#define parallel_maharaja_MAHARAJA_H
 
 #include <vector>
 #include <algorithm>
@@ -40,4 +36,4 @@ public:
     std::vector<position> get_results() { return positions; }
 };
 
-#endif //MPI_MAG_MAHARAJA_H
+#endif //parallel_maharaja_MAHARAJA_H
