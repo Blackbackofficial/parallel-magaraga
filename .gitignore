@@ -33,6 +33,8 @@
 
 
 # Bin
+.idea
+/cmake-build-debug
 CMakeCache.txt
 chessboard
 cmake_install.cmake
