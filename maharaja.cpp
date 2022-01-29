@@ -63,7 +63,7 @@ position Maharaja::search_min_position() {
 
     for (int i = 0; i < processes; i++) {
         p = fork();
-        if (p != 0) {
+        if (p == 0) {
             std::cout << "Создался процесс " << i << std::endl;
             process_num = i;
             break;
@@ -88,7 +88,7 @@ position Maharaja::search_min_position() {
         }
         //std::cout << "Процесс " << process_num << " завершился" << std::endl;
         close(pip[1]);
-        exit(0);
+        _exit(0);
     }
 
     close(pip[1]);
