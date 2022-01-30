@@ -23,6 +23,7 @@ int main(int argc, char **argv)
 	// Получаем количество запущенных процессов
 	MPI_Comm_size(MPI_COMM_WORLD, &thread_size);
 	if(thread == FIRST_THREAD){
+		
 		// Выводим информацию о запуске
 		printf("----- Programm information -----\n");
 		printf(">>> Processor: %s\n", processor_name);
