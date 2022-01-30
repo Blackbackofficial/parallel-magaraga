@@ -6,7 +6,7 @@
 #include "chessboard.h"
 #define FIRST_THREAD 0
 using namespace std;
-static void vector_to_int16(std::set<chessboard_map> source, uint16_t *res, int l_board);
+static uint16_t *vector_to_int16(std::set<chessboard_map> source, uint16_t *res, int l_board);
 
 int main(int argc, char **argv)
 {
@@ -43,53 +43,42 @@ int main(int argc, char **argv)
     int diap_end = thread == thread_size - 1 ? (l_board*l_board) : diap_start + shag;
 
     Chessboard chessboard(l_board);
-    uint16_t *res;
 	std::set<chessboard_map> source = chessboard.PrintHardDecision(diap_start, diap_end);
-	vector_to_int16(source, res, l_board);
-	//printf("%ld", sizeof(res));
-	/*for (int i = 0; i< source.size()*l_board*l_board; i++)
-	{
-		printf("%d ", res[i]);
+	uint16_t res[source.size()*l_board*l_board];
+	//res = vector_to_int16(source, res, l_board);
+	if (thread != FIRST_THREAD){
+		int i = 0;
+		std::set<chessboard_map>::iterator it1, it2;
+		for (it1 = source.begin(), it2 = source.end(); it1 != it2; ++it1){
+			for (int j = 0; j < l_board; j++)
+			{
+				for (int k = 0; k <l_board; k++){
+					res[i] = (uint16_t)((*it1)[j][k]);
+					i++;
+				}
+			}
+		}
 	}
-	delete(res);*/
 
-	/*if (thread != FIRST_THREAD)
+	printf ("\n");
+	if (thread != FIRST_THREAD)
 	{
-		MPI_Send (res, 1, MPI_Type_vector, 0, 0, MPI_COMM_WORLD);
+		MPI_Send (res, (int)source.size()*l_board*l_board,MPI_UNSIGNED_SHORT, 0, 0, MPI_COMM_WORLD);
+		//free(res);
 	}
 	else{
         int count;
 		int i = 1;
-		int16_t *j;
+		uint16_t *j;
 		while (i < thread_size){
-            MPI_Recv(&j, 1, MPI_Type_vector, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
+			j = (uint16_t*)malloc(sizeof(uint16_t)*count);
+            MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			i++;
 		}
-		//printf ("res = %d\n", res);//можно заменить на запись в файл
-	}*/
+	}
 	
 	MPI_Finalize();
 	return (0);
-}
-
-static void vector_to_int16(std::set<chessboard_map> source, uint16_t *res, int l_board)
-{
-	res = (uint16_t*)malloc(sizeof(uint16_t)*source.size()*l_board*l_board);
-	auto t1= source.begin(), end = source.end();
-	int i = 0;
-	int a = 0;
-	while (t1 != end)
-	{
-		chessboard_map map = *t1;
-		for (int j = 0; j < l_board; j++)
-		{
-			for (int k = 0; k <l_board; k++){
-				printf("%d, %d, %d, %ld\n", i, j, k, i*source.size()+j*l_board+k);
-				res[i*source.size()+j*l_board+k] = map[i][j];
-				printf("%d\n", res[i*source.size()+j*l_board+k]);
-			}
-		}
-		t1++;
-		i++;
-	}
 }
