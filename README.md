@@ -9,4 +9,4 @@ mpic++ main.cpp chessboard.cpp -o a.out
 
 ### Run
 ```
-mpiexec -n 2 ./a.out
+mpirun -n 2 ./a.out

@@ -1,10 +1,7 @@
 #include <vector>
 #include <iostream>
-#include <algorithm>
 #include <fstream>
-#include <stdio.h>
 #include <mpi.h>
-#include <time.h> 
 #include <set>
 
 #define FIRST_THREAD 0

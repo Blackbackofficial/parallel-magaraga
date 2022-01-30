@@ -12,11 +12,11 @@ int main(int argc, char **argv) {
 
     clock_t start;
 	if (thread == FIRST_THREAD) {
-		printf("----- Programm information -----\n"); // Info
-		printf(">>> Processor: %s\n", processor_name);
-		printf(">>> Num threads: %d\n", thread_size);
-		printf(">>> Input length of chessboard: ");
-		scanf ("%d", &l_board);
+		cout << "----- Programm information -----\n" << endl;
+		cout << ">>> Processor: " << processor_name << endl;
+		cout << ">>> Num threads: " << thread_size << endl;
+		cout << ">>> Input length of chessboard: ";
+		cin >> l_board;
 		start = clock(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
@@ -78,13 +78,21 @@ int main(int argc, char **argv) {
 			free(j);
 			i++;
 		}
-		printf("%ld\n", source.size());
+		cout << ">>> Count: " << source.size() << endl;
 
 		clock_t end = clock(); //конец замера
 		double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-		printf("Time %lf\n", seconds);
+		cout << ">>> Time: " << seconds << "s" << endl;
+
+		ofstream out; 		// write to file
+    	out.open("result.txt");
+    	if (out.is_open()) {
+			out << ">>> Thread size: "<< thread_size << ", length of chessboard: " << l_board << ";" << std::endl;
+        	out << ">>> Count: " << source.size() << ";" << std::endl;
+			out << ">>> Time: " << seconds << "s;" << std::endl;
+    	}
+		out.close();
 	}
 	
 	MPI_Finalize();
-	return 0;
 }
