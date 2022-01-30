@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
 		double seconds = (double)(end - start) / CLOCKS_PER_SEC;
 		cout << ">>> Time: " << seconds << "s" << endl;
 
-		ofstream out; 		// write to file
+		ofstream out; // запись в файл
     	out.open("result.txt");
     	if (out.is_open()) {
 			out << ">>> Thread size: "<< thread_size << ", length of chessboard: " << l_board << ";" << std::endl;
