@@ -60,7 +60,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-	printf ("\n");
 	if (thread != FIRST_THREAD)
 	{
 		MPI_Send (res, (int)source.size()*l_board*l_board,MPI_UNSIGNED_SHORT, 0, 0, MPI_COMM_WORLD);
@@ -70,13 +69,34 @@ int main(int argc, char **argv)
         int count;
 		int i = 1;
 		uint16_t *j;
+		int w;
+		chessboard_map new_map;
 		while (i < thread_size){
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
 			j = (uint16_t*)malloc(sizeof(uint16_t)*count);
             MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+			w = 0;
+			while (w < count)
+			{
+				new_map.resize(l_board);
+				for (vector<uint16_t>& x : new_map) { // создали chessboard_size столбцов(x)
+					x.resize(l_board, 1);    //заполнили true
+				}
+				for (int q = 0; q < l_board; q++)
+				{
+					for(int k = 0; k < l_board; k++)
+					{
+						new_map[q][k] = j[w];
+						w++;
+					}
+				}
+				source.insert(move(new_map));
+			}
+			free(j);
 			i++;
 		}
+		printf("%ld\n", source.size());
 	}
 	
 	MPI_Finalize();
