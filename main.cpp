@@ -1,10 +1,9 @@
 #include "chessboard.h"
 
-
 int main(int argc, char **argv) {
 	int thread, thread_size, processor_name_length;
 	int l_board;
-	char* processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
+	char *processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
 	MPI_Status status;
 	MPI_Init(&argc, &argv);  // Инициализируем работу MPI
 	MPI_Get_processor_name(processor_name, &processor_name_length);	// Получаем имя физического процессора

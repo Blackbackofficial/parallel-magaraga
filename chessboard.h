@@ -7,9 +7,7 @@
 #include <time.h> 
 #include <set>
 
-
 #define FIRST_THREAD 0
-
 
 using namespace std;
 using chessboard_map = vector<vector<uint16_t>>; //(y,x)
