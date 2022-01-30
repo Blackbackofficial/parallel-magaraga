@@ -73,22 +73,22 @@ void Chessboard::CloseKnightFields(chessboard_map &initial_chessboard_map, size_
     if (x > 1 && y > 0) { //LT
         initial_chessboard_map[y - 1][x - 2] = 0;
     }
-    if ( (x + 1 < initial_chessboard_map.size()) && y > 1) { //TR
+    if (x + 1 < initial_chessboard_map.size() && y > 1) { //TR
         initial_chessboard_map[y - 2][x + 1] = 0;
     }
-    if (x > 1 && (y + 1 < initial_chessboard_map.size()) ) { //LD
+    if (x > 1 && y + 1 < initial_chessboard_map.size()) { //LD
         initial_chessboard_map[y + 1][x - 2] = 0;
     }
-    if ((x + 2 < initial_chessboard_map.size()) && y > 0) { //RT
+    if (x + 2 < initial_chessboard_map.size() && y > 0) { //RT
         initial_chessboard_map[y - 1][x + 2] = 0;
     }
-    if (x > 0 && (y + 2 < initial_chessboard_map.size())) { //DL
+    if (x > 0 && y + 2 < initial_chessboard_map.size()) { //DL
         initial_chessboard_map[y + 2][x - 1] = 0;
     }
-    if ((x + 1 < initial_chessboard_map.size()) && (y + 2 < initial_chessboard_map.size())) { //DR
+    if (x + 1 < initial_chessboard_map.size() && y + 2 < initial_chessboard_map.size()) { //DR
         initial_chessboard_map[y + 2][x + 1] = 0;
     }
-    if ((x + 2 < initial_chessboard_map.size()) && (y + 1 < initial_chessboard_map.size())) { //RD
+    if (x + 2 < initial_chessboard_map.size() && y + 1 < initial_chessboard_map.size()) { //RD
         initial_chessboard_map[y + 1][x + 2] = 0;
     }
 }
