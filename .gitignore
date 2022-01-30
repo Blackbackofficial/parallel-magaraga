@@ -42,3 +42,4 @@ Makefile
 result.txt
 /CMakeFiles
 mpi_mag
+/vscode
