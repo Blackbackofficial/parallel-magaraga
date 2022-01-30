@@ -6,25 +6,19 @@ int main(int argc, char **argv) {
 	int l_board;
 	char* processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
 	MPI_Status status;
-	// Инициализируем работу MPI
-	MPI_Init(&argc, &argv);
-	// Получаем имя физического процессора
-	MPI_Get_processor_name(processor_name, &processor_name_length);
-	// Получаем номер конкретного процесса на котором запущена программа
-	MPI_Comm_rank(MPI_COMM_WORLD, &thread);
-	// Получаем количество запущенных процессов
-	MPI_Comm_size(MPI_COMM_WORLD, &thread_size);
+	MPI_Init(&argc, &argv);  // Инициализируем работу MPI
+	MPI_Get_processor_name(processor_name, &processor_name_length);	// Получаем имя физического процессора
+	MPI_Comm_rank(MPI_COMM_WORLD, &thread);	// Получаем номер конкретного процесса на котором запущена программа
+	MPI_Comm_size(MPI_COMM_WORLD, &thread_size); // Получаем количество запущенных процессов
 
     clock_t start;
 	if (thread == FIRST_THREAD) {
-		// Выводим информацию о запуске
-		printf("----- Programm information -----\n");
+		printf("----- Programm information -----\n"); // Info
 		printf(">>> Processor: %s\n", processor_name);
 		printf(">>> Num threads: %d\n", thread_size);
 		printf(">>> Input length of chessboard: ");
-		// Просим пользователья ввести данные на которых будут вычисления
 		scanf ("%d", &l_board);
-		start = clock();   //начало замера
+		start = clock(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
 			MPI_Send(&l_board, 1, MPI_INT, to_thread, 0, MPI_COMM_WORLD);
@@ -34,9 +28,9 @@ int main(int argc, char **argv) {
 	}
     
     //Обозначаем диаппазон рассчетов для конкретного процесса
-    int shag = (l_board*l_board % thread_size) == 0 ? (l_board*l_board / thread_size) : (l_board*l_board / thread_size-1);
-    int diap_start = shag * thread;
-    int diap_end = thread == thread_size - 1 ? (l_board*l_board) : diap_start + shag;
+    int shag = (l_board*l_board%thread_size) == 0 ? (l_board*l_board/thread_size) : (l_board*l_board/thread_size-1);
+    int diap_start = shag*thread;
+    int diap_end = (thread == thread_size - 1) ? (l_board*l_board) : (diap_start + shag);
 
     Chessboard chessboard(l_board);
 	set<chessboard_map> source = chessboard.PrintHardDecision(diap_start, diap_end);

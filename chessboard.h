@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <stdio.h>
-#include "mpi.h"
+#include <mpi.h>
 #include <time.h> 
 #include <set>
 
