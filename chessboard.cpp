@@ -31,11 +31,10 @@ std::set<chessboard_map> Chessboard::PrintHardDecision(int start, int end) {
     vector <pair<size_t, size_t>> coordinates;
     for (size_t i = 0; i < chessboard_map_.size(); ++i) {
         for (size_t j = 0; j < chessboard_map_.size(); ++j) {
-            coordinates.push_back({ i,j });
+            coordinates.push_back({i, j});
         }
     }
-    for (int i = start; i < end; i++)
-    {
+    for (int i = start; i < end; i++) {
         int x = i / chessboard_map_.size();
         int y = i % chessboard_map_.size();
         AddMagaraja(chessboard_map_, x, y);
@@ -111,7 +110,7 @@ void Chessboard::CloseKnightFields(chessboard_map& initial_chessboard_map, size_
 }
 
 void Chessboard::CloseTopLeftDiagonalFields(chessboard_map& initial_chessboard_map, size_t x, size_t y) const {
-    while ((x != 0) && (y != 0)) {
+    while (x != 0 && y != 0) {
         initial_chessboard_map[y][x] = 0;//левую верхнюю диагональ
         x -= 1;
         y -= 1;
@@ -132,7 +131,7 @@ void Chessboard::CloseTopRightDiagonalFields(chessboard_map& initial_chessboard_
 }
 
 void Chessboard::CloseDownLeftDiagonalFields(chessboard_map& initial_chessboard_map, size_t x, size_t y) const {
-    while ((x != 0) && (y < initial_chessboard_map.size())) {
+    while (x != 0 && y < initial_chessboard_map.size()) {
         initial_chessboard_map[y][x] = 0;//заполняет левую нижнюю диагональ
         x -= 1;
         y += 1;

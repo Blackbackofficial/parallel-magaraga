@@ -1,15 +1,16 @@
-
-#include <iostream>
 #include <stdio.h>
 #include "mpi.h"
 #include <vector>
+#include <time.h> 
 #include "chessboard.h"
-#define FIRST_THREAD 0
-using namespace std;
-static uint16_t *vector_to_int16(std::set<chessboard_map> source, uint16_t *res, int l_board);
 
-int main(int argc, char **argv)
-{
+#define FIRST_THREAD 0
+
+using namespace std;
+
+static uint16_t *vector_to_int16(set<chessboard_map> source, uint16_t *res, int l_board);
+
+int main(int argc, char **argv) {
 	int thread, thread_size, processor_name_length;
 	int l_board;
 	char* processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
@@ -22,8 +23,9 @@ int main(int argc, char **argv)
 	MPI_Comm_rank(MPI_COMM_WORLD, &thread);
 	// Получаем количество запущенных процессов
 	MPI_Comm_size(MPI_COMM_WORLD, &thread_size);
-	if(thread == FIRST_THREAD){
-		
+
+    clock_t start;
+	if (thread == FIRST_THREAD){
 		// Выводим информацию о запуске
 		printf("----- Programm information -----\n");
 		printf(">>> Processor: %s\n", processor_name);
@@ -31,12 +33,14 @@ int main(int argc, char **argv)
 		printf(">>> Input length of chessboard: ");
 		// Просим пользователья ввести данные на которых будут вычисления
 		scanf ("%d", &l_board);
+		start = clock();
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
-		for (int to_thread = 1; to_thread < thread_size; to_thread++)
+		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
 			MPI_Send(&l_board, 1, MPI_INT, to_thread, 0, MPI_COMM_WORLD);
-	}
-	else
+		}
+	} else {
 		MPI_Recv(&l_board, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
+	}
     
     //Обозначаем диаппазон рассчетов для конкретного процесса
     int shag = (l_board*l_board)%thread_size == 0 ? (l_board*l_board)/thread_size : (l_board*l_board)/(thread_size-1);
@@ -44,16 +48,15 @@ int main(int argc, char **argv)
     int diap_end = thread == thread_size - 1 ? (l_board*l_board) : diap_start + shag;
 
     Chessboard chessboard(l_board);
-	std::set<chessboard_map> source = chessboard.PrintHardDecision(diap_start, diap_end);
+	set<chessboard_map> source = chessboard.PrintHardDecision(diap_start, diap_end);
 	uint16_t res[source.size()*l_board*l_board];
 	//res = vector_to_int16(source, res, l_board);
-	if (thread != FIRST_THREAD){
+	if (thread != FIRST_THREAD) {
 		int i = 0;
-		std::set<chessboard_map>::iterator it1, it2;
-		for (it1 = source.begin(), it2 = source.end(); it1 != it2; ++it1){
-			for (int j = 0; j < l_board; j++)
-			{
-				for (int k = 0; k <l_board; k++){
+		set<chessboard_map>::iterator it1, it2;
+		for (it1 = source.begin(), it2 = source.end(); it1 != it2; ++it1) {
+			for (int j = 0; j < l_board; j++) {
+				for (int k = 0; k <l_board; k++) {
 					res[i] = (uint16_t)((*it1)[j][k]);
 					i++;
 				}
@@ -61,33 +64,28 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (thread != FIRST_THREAD)
-	{
+	if (thread != FIRST_THREAD) {
 		MPI_Send (res, (int)source.size()*l_board*l_board,MPI_UNSIGNED_SHORT, 0, 0, MPI_COMM_WORLD);
 		//free(res);
-	}
-	else{
+	} else {
         int count;
 		int i = 1;
 		uint16_t *j;
 		int w;
 		chessboard_map new_map;
-		while (i < thread_size){
+		while (i < thread_size) {
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
 			j = (uint16_t*)malloc(sizeof(uint16_t)*count);
             MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			w = 0;
-			while (w < count)
-			{
+			while (w < count) {
 				new_map.resize(l_board);
 				for (vector<uint16_t>& x : new_map) { // создали chessboard_size столбцов(x)
 					x.resize(l_board, 1);    //заполнили true
 				}
-				for (int q = 0; q < l_board; q++)
-				{
-					for(int k = 0; k < l_board; k++)
-					{
+				for (int q = 0; q < l_board; q++) {
+					for (int k = 0; k < l_board; k++) {
 						new_map[q][k] = j[w];
 						w++;
 					}
@@ -98,8 +96,14 @@ int main(int argc, char **argv)
 			i++;
 		}
 		printf("%ld\n", source.size());
+
+		// end time
+		clock_t end = clock();
+		double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+		printf("Time %lf\n", seconds);
 	}
 	
 	MPI_Finalize();
-	return (0);
+
+	return 0;
 }

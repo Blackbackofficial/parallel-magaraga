@@ -1,15 +1,11 @@
-#pragma once
-
 #include <vector>
 #include <iostream>
 #include <fstream>
 #include <set>
 
-using namespace std::literals;
-
 using chessboard_map = std::vector<std::vector<uint16_t>>;//(y,x)
 
-inline bool operator< (const chessboard_map& lhs, const chessboard_map& rhs);
+inline bool operator < (const chessboard_map& lhs, const chessboard_map& rhs);
 
 class Chessboard {
 public:
