@@ -13,9 +13,9 @@ using namespace std;
 using chessboard_map = vector<vector<uint16_t>>; //(y,x)
 
 
-class Chessboard {
+class ChessBoard {
     public:
-        Chessboard(size_t chessboard_size);
+        ChessBoard(size_t chessboard_size);
         set<chessboard_map> PrintHardDecision(int start, int end);
 
     private:

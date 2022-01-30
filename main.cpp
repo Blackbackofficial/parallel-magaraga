@@ -31,8 +31,8 @@ int main(int argc, char **argv) {
     int diap_start = shag*thread;
     int diap_end = (thread == thread_size - 1) ? (l_board*l_board) : (diap_start + shag);
 
-    Chessboard chessboard(l_board);
-	set<chessboard_map> source = chessboard.PrintHardDecision(diap_start, diap_end);
+    ChessBoard chessBoard(l_board);
+	set<chessboard_map> source = chessBoard.PrintHardDecision(diap_start, diap_end);
 	uint16_t res[source.size()*l_board*l_board];
 
 	if (thread != FIRST_THREAD) {

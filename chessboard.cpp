@@ -1,15 +1,15 @@
 #include "chessboard.h"
 
-Chessboard::Chessboard(size_t chessboard_size) {
+ChessBoard::ChessBoard(size_t chessboard_size) {
     chessboard_map_.resize(chessboard_size); // создали chessboard_size строк(y)
     for (vector<uint16_t> &x : chessboard_map_) { // создали chessboard_size столбцов(x)
         x.resize(chessboard_size, 1);    //заполнили true
     }
 }
 
-set<chessboard_map> Chessboard::results = {};
+set<chessboard_map> ChessBoard::results = {};
 
-set<chessboard_map> Chessboard::PrintHardDecision(int start, int end) {
+set<chessboard_map> ChessBoard::PrintHardDecision(int start, int end) {
     vector <pair<size_t, size_t>> coordinates;
     for (size_t i = 0; i < chessboard_map_.size(); ++i) {
         for (size_t j = 0; j < chessboard_map_.size(); ++j) {
@@ -26,7 +26,7 @@ set<chessboard_map> Chessboard::PrintHardDecision(int start, int end) {
 }
 
 // Здесь мы КОПИРУЕМ initial_chessboard
-void Chessboard::AddMagaraja(chessboard_map initial_chessboard_map, size_t x, size_t y) const { 
+void ChessBoard::AddMagaraja(chessboard_map initial_chessboard_map, size_t x, size_t y) const {
     CloseTargetFields(initial_chessboard_map, x, y);
     initial_chessboard_map[y][x] = 2; // Cтавим Магараджу
     bool no_fields = true;
@@ -45,28 +45,28 @@ void Chessboard::AddMagaraja(chessboard_map initial_chessboard_map, size_t x, si
     }
 }
 
-void Chessboard::CloseTargetFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseTargetFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     CloseVerticalAndHorizontalFields(initial_chessboard_map, x, y);
     CloseDiagonalFields(initial_chessboard_map, x, y);
     CloseKnightFields(initial_chessboard_map, x, y);
 }
 
 
-void Chessboard::CloseVerticalAndHorizontalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseVerticalAndHorizontalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     for (size_t i = 0; i < initial_chessboard_map.size(); ++i) {
         initial_chessboard_map[i][x] = 0;
         initial_chessboard_map[y][i] = 0;
     }
 }
 
-void Chessboard::CloseDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     CloseTopLeftDiagonalFields(initial_chessboard_map, x, y);
     CloseTopRightDiagonalFields(initial_chessboard_map, x, y);
     CloseDownLeftDiagonalFields(initial_chessboard_map, x, y);
     CloseDownRightDiagonalFields(initial_chessboard_map, x, y);
 }
 
-void Chessboard::CloseKnightFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseKnightFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     if (x > 0 && y > 1) { //TL
         initial_chessboard_map[y - 2][x - 1] = 0;
     }
@@ -93,7 +93,7 @@ void Chessboard::CloseKnightFields(chessboard_map &initial_chessboard_map, size_
     }
 }
 
-void Chessboard::CloseTopLeftDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseTopLeftDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     while (x != 0 && y != 0) {
         initial_chessboard_map[y][x] = 0; //заполняет левую верхнюю диагональ
         x -= 1;
@@ -102,7 +102,7 @@ void Chessboard::CloseTopLeftDiagonalFields(chessboard_map &initial_chessboard_m
     initial_chessboard_map[y][x] = 0;
 }
 
-void Chessboard::CloseTopRightDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseTopRightDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     while (x < initial_chessboard_map.size() && y != 0) {
         initial_chessboard_map[y][x] = 0; //заполняет правую верхнюю диагональ
         x += 1;
@@ -114,7 +114,7 @@ void Chessboard::CloseTopRightDiagonalFields(chessboard_map &initial_chessboard_
     }
 }
 
-void Chessboard::CloseDownLeftDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseDownLeftDiagonalFields(chessboard_map &initial_chessboard_map, size_t x, size_t y) const {
     while (x != 0 && y < initial_chessboard_map.size()) {
         initial_chessboard_map[y][x] = 0; //заполняет левую нижнюю диагональ
         x -= 1;
@@ -126,7 +126,7 @@ void Chessboard::CloseDownLeftDiagonalFields(chessboard_map &initial_chessboard_
     }
 }
 
-void Chessboard::CloseDownRightDiagonalFields(chessboard_map& initial_chessboard_map, size_t x, size_t y) const {
+void ChessBoard::CloseDownRightDiagonalFields(chessboard_map& initial_chessboard_map, size_t x, size_t y) const {
     while (((x += 1) < initial_chessboard_map.size()) && ((y += 1) < initial_chessboard_map.size())) {
         initial_chessboard_map[y][x] = 0; //заполняет правую нижнюю диагональ нулями
     }
