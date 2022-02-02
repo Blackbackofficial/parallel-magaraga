@@ -25,8 +25,7 @@ int main(int argc, char **argv) {
 	} else {
 		MPI_Recv(&l_board, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 	}
-    
-    //Обозначаем диаппазон рассчетов для конкретного процесса
+   //Обозначаем диаппазон рассчетов для конкретного процесса
     int shag = (l_board*l_board%thread_size) == 0 ? (l_board*l_board/thread_size) : (l_board*l_board/thread_size-1);
     int diap_start = shag*thread;
     int diap_end = (thread == thread_size - 1) ? (l_board*l_board) : (diap_start + shag);
@@ -51,7 +50,7 @@ int main(int argc, char **argv) {
 	if (thread != FIRST_THREAD) {
 		MPI_Send (res, (int)source.size()*l_board*l_board, MPI_UNSIGNED_SHORT, 0, 0, MPI_COMM_WORLD);
 	} else {
-        int count;
+		int count;
 		int i = 1;
 		uint16_t *j;
 		int w;
@@ -85,14 +84,14 @@ int main(int argc, char **argv) {
 		cout << ">>> Time: " << seconds << "s" << endl;
 
 		ofstream out; // запись в файл
-    	out.open("result.txt");
-    	if (out.is_open()) {
+		out.open("result.txt");
+		if (out.is_open()) {
 			out << ">>> Thread size: "<< thread_size << ", length of chessboard: " << l_board << ";" << std::endl;
-        	out << ">>> Count: " << source.size() << ";" << std::endl;
+			out << ">>> Count: " << source.size() << ";" << std::endl;
 			out << ">>> Time: " << seconds << "s;" << std::endl;
-    	}
+		}
 		out.close();
 	}
-	
+
 	MPI_Finalize();
 }
