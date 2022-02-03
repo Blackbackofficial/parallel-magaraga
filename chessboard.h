@@ -16,7 +16,7 @@ class ChessBoard {
         set<chessboard_map> PrintHardDecision(int start, int end);
 
     private:
-        chessboard_map chessboard_map_; //в конструкторе заполняется еденицами(true), по дефолту нулями;
+        chessboard_map chessboard_map_; // в конструкторе заполняется еденицами(true), по дефолту нулями;
         static set<chessboard_map> results; // здесь храним удачные результаты
 
         void AddMagaraja(chessboard_map initial_chessboard_map, size_t x, size_t y) const;
