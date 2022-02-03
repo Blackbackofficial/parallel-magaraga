@@ -2,7 +2,7 @@
 
 ChessBoard::ChessBoard(size_t chessboard_size) {
     chessboard_map_.resize(chessboard_size); // создали chessboard_size строк(y)
-    for (vector<uint16_t> &x : chessboard_map_) { // создали chessboard_size столбцов(x)
+    for (vector<int16_t> &x : chessboard_map_) { // создали chessboard_size столбцов(x)
         x.resize(chessboard_size, 1);    //заполнили true
     }
 }

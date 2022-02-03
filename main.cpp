@@ -27,13 +27,13 @@ int main(int argc, char **argv) {
 	}
     
 	//Обозначаем диаппазон рассчетов для конкретного процесса
-    int shag = (l_board*l_board%thread_size) == 0 ? (l_board*l_board/thread_size) : (l_board*l_board/thread_size-1);
+    int shag = (l_board*l_board%thread_size == 0) ? (l_board*l_board/thread_size) : (l_board*l_board/thread_size-1);
     int diap_start = shag*thread;
     int diap_end = (thread == thread_size - 1) ? (l_board*l_board) : (diap_start + shag);
 
     ChessBoard chessBoard(l_board);
 	set<chessboard_map> source = chessBoard.PrintHardDecision(diap_start, diap_end);
-	uint16_t res[source.size()*l_board*l_board];
+	int16_t res[source.size()*l_board*l_board];
 
 	if (thread != FIRST_THREAD) {
 		int i = 0;
@@ -41,30 +41,27 @@ int main(int argc, char **argv) {
 		for (it1 = source.begin(), it2 = source.end(); it1 != it2; ++it1) {
 			for (int j = 0; j < l_board; j++) {
 				for (int k = 0; k < l_board; k++) {
-					res[i] = (uint16_t)((*it1)[j][k]);
+					res[i] = (int16_t)((*it1)[j][k]);
 					i++;
 				}
 			}
 		}
-	}
-
-	if (thread != FIRST_THREAD) {
 		MPI_Send (res, (int)source.size()*l_board*l_board, MPI_UNSIGNED_SHORT, 0, 0, MPI_COMM_WORLD);
 	} else {
 		int count;
 		int i = 1;
-		uint16_t *j;
+		int16_t *j;
 		int w;
 		chessboard_map new_map;
 		while (i < thread_size) {
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
-			j = (uint16_t*)malloc(sizeof(uint16_t)*count);
+			j = (int16_t*)malloc(sizeof(int16_t)*count);
             MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			w = 0;
 			while (w < count) {
 				new_map.resize(l_board);
-				for (vector<uint16_t> &x : new_map) { // создали chessboard_size столбцов(x)
+				for (vector<int16_t> &x : new_map) { // создали chessboard_size столбцов(x)
 					x.resize(l_board, 1); //заполнили true
 				}
 				for (int q = 0; q < l_board; q++) {
@@ -86,7 +83,7 @@ int main(int argc, char **argv) {
 		ofstream out; // запись в файл
 		out.open("result.txt");
 		if (out.is_open()) {
-			out << ">>> Thread size: "<< thread_size<<", length of chessboard: "<<l_board<<"x"<<l_board<<";"<<endl;
+			out << ">>> Thread size: "<<thread_size<<", length of chessboard: "<<l_board<<"x"<<l_board<<";"<<endl;
 			out << ">>> Count: " << source.size() << ";" << endl;
 			out << ">>> Time: " << endtime-starttime << "s;" << endl;
 		}
