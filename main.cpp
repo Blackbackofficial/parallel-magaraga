@@ -25,7 +25,8 @@ int main(int argc, char **argv) {
 	} else {
 		MPI_Recv(&l_board, 1, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 	}
-   //Обозначаем диаппазон рассчетов для конкретного процесса
+    
+	//Обозначаем диаппазон рассчетов для конкретного процесса
     int shag = (l_board*l_board%thread_size) == 0 ? (l_board*l_board/thread_size) : (l_board*l_board/thread_size-1);
     int diap_start = shag*thread;
     int diap_end = (thread == thread_size - 1) ? (l_board*l_board) : (diap_start + shag);
