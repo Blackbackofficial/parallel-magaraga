@@ -10,14 +10,14 @@ int main(int argc, char **argv) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &thread);	// Получаем номер конкретного процесса на котором запущена программа
 	MPI_Comm_size(MPI_COMM_WORLD, &thread_size); // Получаем количество запущенных процессов
 
-    clock_t start;
+	double starttime, endtime;
 	if (thread == FIRST_THREAD) {
 		cout << "----- Programm information -----\n" << endl;
 		cout << ">>> Processor: " << processor_name << endl;
 		cout << ">>> Num threads: " << thread_size << endl;
 		cout << ">>> Input length of chessboard: ";
 		cin >> l_board;
-		start = clock(); //начало замера
+		starttime = MPI_Wtime(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
 			MPI_Send(&l_board, 1, MPI_INT, to_thread, 0, MPI_COMM_WORLD);
@@ -80,16 +80,15 @@ int main(int argc, char **argv) {
 		}
 		cout << ">>> Count: " << source.size() << endl;
 
-		clock_t end = clock(); //конец замера
-		double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-		cout << ">>> Time: " << seconds << "s" << endl;
+		endtime = MPI_Wtime(); //конец замера
+		cout << ">>> Time: " << endtime-starttime << "s" << endl;
 
 		ofstream out; // запись в файл
 		out.open("result.txt");
 		if (out.is_open()) {
-			out << ">>> Thread size: "<< thread_size << ", length of chessboard: " << l_board << ";" << std::endl;
-			out << ">>> Count: " << source.size() << ";" << std::endl;
-			out << ">>> Time: " << seconds << "s;" << std::endl;
+			out << ">>> Thread size: "<< thread_size<<", length of chessboard: "<<l_board<<"x"<<l_board<<";"<<endl;
+			out << ">>> Count: " << source.size() << ";" << endl;
+			out << ">>> Time: " << endtime-starttime << "s;" << endl;
 		}
 		out.close();
 	}
