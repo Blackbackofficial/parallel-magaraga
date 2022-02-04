@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 	int thread, thread_size, processor_name_length;
-	int l_board = 6;
+	int l_board;
 	char *processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
 	MPI_Status status;
 	MPI_Init(&argc, &argv);  // Инициализируем работу MPI
@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
 		cout << ">>> Num threads: " << thread_size << endl;
 	
 		char *temp;
-		// l_board = strtol(argv[1], &temp, 10);
-		// cout << ">>> Input length of chessboard: " << l_board << endl;
+		l_board = strtol(argv[1], &temp, 10);
+		cout << ">>> Input length of chessboard: " << l_board << endl;
 		starttime = MPI_Wtime(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 
     ChessBoard chessBoard(l_board);
 	set<chessboard_map> source = chessBoard.PrintHardDecision(diap_start, diap_end);
-	int16_t res[source.size()*l_board*l_board];
+	uint16_t res[source.size()*l_board*l_board];
 
 	if (thread != FIRST_THREAD) {
 		int i = 0;
@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 		for (it1 = source.begin(), it2 = source.end(); it1 != it2; ++it1) {
 			for (int j = 0; j < l_board; j++) {
 				for (int k = 0; k < l_board; k++) {
-					res[i] = (int16_t)((*it1)[j][k]);
+					res[i] = (uint16_t)((*it1)[j][k]);
 					i++;
 				}
 			}
@@ -56,12 +56,12 @@ int main(int argc, char **argv) {
 		while (i < thread_size) {
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
-			int16_t *j = (int16_t*)calloc(count, sizeof(int16_t));
+			uint16_t *j = (uint16_t*)calloc(count, sizeof(uint16_t));
             MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			int w = 0;
 			while (w < count) {
 				new_map.resize(l_board);
-				for (vector<int16_t> &x : new_map) { // создали chessboard_size столбцов(x)
+				for (vector<uint16_t> &x : new_map) { // создали chessboard_size столбцов(x)
 					x.resize(l_board, 1); //заполнили true
 				}
 				for (int q = 0; q < l_board; q++) {
