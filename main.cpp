@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 	int thread, thread_size, processor_name_length;
-	int l_board;
+	int l_board = 6;
 	char *processor_name = new char[MPI_MAX_PROCESSOR_NAME * sizeof(char)];
 	MPI_Status status;
 	MPI_Init(&argc, &argv);  // Инициализируем работу MPI
@@ -17,8 +17,8 @@ int main(int argc, char **argv) {
 		cout << ">>> Num threads: " << thread_size << endl;
 	
 		char *temp;
-		l_board = strtol(argv[1], &temp, 10);
-		cout << ">>> Input length of chessboard: " << l_board << endl;
+		// l_board = strtol(argv[1], &temp, 10);
+		// cout << ">>> Input length of chessboard: " << l_board << endl;
 		starttime = MPI_Wtime(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
