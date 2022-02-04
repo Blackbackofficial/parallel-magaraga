@@ -15,8 +15,10 @@ int main(int argc, char **argv) {
 		cout << "----- Programm information -----\n";
 		cout << ">>> Processor: " << processor_name << endl;
 		cout << ">>> Num threads: " << thread_size << endl;
-		cout << ">>> Input length of chessboard: ";
-		cin >> l_board;
+	
+		char *temp;
+		l_board = strtol(argv[1], &temp, 10);
+		cout << ">>> Input length of chessboard: " << l_board << endl;
 		starttime = MPI_Wtime(); //начало замера
 		// Каждому процессу отправляем полученные данные с тегом сообщения 0.
 		for (int to_thread = 1; to_thread < thread_size; to_thread++) {
