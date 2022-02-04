@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 		while (i < thread_size) {
 			MPI_Probe(MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			MPI_Get_count(&status, MPI_UNSIGNED_SHORT, &count);
-			int16_t *j = (int16_t*)malloc(sizeof(int16_t)*count);
+			int16_t *j = (int16_t*)calloc(count, sizeof(int16_t));
             MPI_Recv(j, count, MPI_UNSIGNED_SHORT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, &status);
 			int w = 0;
 			while (w < count) {
