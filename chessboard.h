@@ -7,7 +7,7 @@
 #define FIRST_THREAD 0
 
 using namespace std;
-using chessboard_map = vector<vector<int16_t>>; //(y,x)
+using chessboard_map = vector<vector<uint16_t>>; //(y,x)
 
 
 class ChessBoard {
